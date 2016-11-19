@@ -46,7 +46,7 @@ module.exports = {
       exclude: /node_modules/,
       loader: 'react-hot!babel-loader'  // 从右往左开始执行，react-hot：实时编译react组件的loader
     }, {
-       test: /\.scss/,
+       test: /\.scss$/,
         loader: 'style-loader!css-loader!autoprefixer-loader?{browsers:["last 2 version"]}!sass-loader?sass-loader?outputStyle=expanded'
     }, {
       test: /\.css$/,
