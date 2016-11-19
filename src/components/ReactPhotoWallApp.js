@@ -1,22 +1,31 @@
 'use strict';
 
 var React = require('react/addons');
-var ReactTransitionGroup = React.addons.TransitionGroup;
 
 // CSS
 require('normalize.css');
-require('../styles/main.css');
+require('../styles/main.scss');
 
-var imageURL = require('../images/yeoman.png');
+// 获取图片相关的数据
+var imagesData = require('../data/imagesData.json');
+
+// 将图片名信息转化成图片URL信息
+imagesData = (function genImageURL(imagesDataArr) {
+    for(var i = 0; i < imagesDataArr.length; i++){
+        var singleImageData = imagesDataArr[i];
+        singleImageData.imageURL = require('../images/' + singleImageData.fileName);
+        imagesDataArr = singleImageData;
+    }
+    return imagesDataArr;
+})(imagesData);
 
 var ReactPhotoWallApp = React.createClass({
   render: function() {
     return (
-      <div className="main">
-        <ReactTransitionGroup transitionName="fade">
-          <img src={imageURL} />
-        </ReactTransitionGroup>
-      </div>
+      <section className="stage">
+          <section className="img-sec"></section>
+          <nav className="controller-nav"></nav>
+      </section>
     );
   }
 });

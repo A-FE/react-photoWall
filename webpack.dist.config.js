@@ -48,16 +48,22 @@ module.exports = {
       exclude: /node_modules/,
       loader: 'eslint-loader'
     }],
-    loaders: [{
-      test: /\.(js|jsx)$/,
-      exclude: /node_modules/,
-      loader: 'babel-loader'
-    }, {
-      test: /\.css$/,
-      loader: 'style-loader!css-loader'
-    }, {
-      test: /\.(png|jpg|woff|woff2)$/,
-      loader: 'url-loader?limit=8192'
-    }]
-  }
+      loaders: [{                 // 解析模块
+          test: /\.(js|jsx)$/,
+          exclude: /node_modules/,
+          loader: 'react-hot!babel-loader'  // 从右往左开始执行，react-hot：实时编译react组件的loader
+      }, {
+          test: /\.scss/,
+          loader: 'style-loader!css-loader!autoprefixer-loader?{browsers:["last 2 version"]}!sass-loader?sass-loader?outputStyle=expanded'
+      }, {
+          test: /\.css$/,
+          loader: 'style-loader!css-loader!autoprefixer-loader?{browsers:["last 2 version"]}'
+      }, {
+          test: /\.(png|jpg|woff|woff2)$/,
+          loader: 'url-loader?limit=8192'
+      },{
+          test:/\.json$/,
+          loader: 'json-loader'
+      }]
+  },
 };
