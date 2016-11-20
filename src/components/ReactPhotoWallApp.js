@@ -22,10 +22,20 @@ function getRangeRandom(range) {
     return Math.floor(Math.random() * (range[1] - range[0]) + range[0]) + 'px';
 }
 
+/*
+* 获取任意旋转的角度 -30< rotate < 30
+* */
+function getRotateDeg() {
+    return Math.floor(Math.random() * 60 - 30) + 'deg';
+}
+
 var ImgFigure = React.createClass({
    render: function () {
-       var styleObj = this.props.arrange.pos ? this.props.arrange.pos : {};
-
+       var pos = this.props.arrange.pos ? this.props.arrange.pos : {};
+       var transform = {
+           transform: 'rotate(' + getRotateDeg() + ')'
+       };
+       var styleObj = Object.assign({}, transform, pos);
        return (
            <figure className="img-figure" style={styleObj}>
                <img src={this.props.data.imageURL} alt={this.props.data.title}/>
@@ -79,7 +89,8 @@ var ReactPhotoWallApp = React.createClass({
         // 计算中心图片的位置点
         this.Constant.centerPos = {
             left: halfStageW - halfImgW + 'px',
-            top: halfStageH - halfImgH + 'px'
+            top: halfStageH - halfImgH + 'px',
+            transform: 'rotate(0)'
         };
 
         // 计算左右图片的位置
@@ -115,7 +126,7 @@ var ReactPhotoWallApp = React.createClass({
             topImgNum = Math.floor(Math.random() * 2), // 顶部图片的数量
             topImgSpliceIndex = 0,                     // 顶部图片的索引
             imgsArrangeCenterArr = imgsArrangeArr.splice(centerIndex, 1);  // 中心图片的状态
-            // 首先居中 中心图片
+            // 首先居中 中心图片,旋转0度
             imgsArrangeCenterArr[0].pos = centerPos;
 
             // 取出要布局上侧的图片的状态信息
@@ -128,8 +139,7 @@ var ReactPhotoWallApp = React.createClass({
                 pos: {
                     left: getRangeRandom(vPosRangeX),
                     top: getRangeRandom(vPosRangeY)
-                },
-                title: '顶部图片'
+                }
             };
         }
 
