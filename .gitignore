@@ -29,4 +29,5 @@ $RECYCLE.BIN/
 
 node_modules/
 .tmp
+.idea
 /src/main.js
