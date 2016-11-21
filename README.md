@@ -1,6 +1,5 @@
-# react-photoWall
-用react做的的动态相册
-
+# 用react + webpack + grunt做的的动态相册
+* [在线DOM](https://peng1992.github.io/react-photoWall/)
 ``` 
 # 安装项目依赖
 cnpm install 
