@@ -36,8 +36,8 @@ module.exports = {
   resolve: {
     extensions: ['', '.js', '.jsx'],
     alias: {
+      'src/assets': __dirname + '/src/assets',
       'styles': __dirname + '/src/styles',
-      'mixins': __dirname + '/src/mixins',
       'components': __dirname + '/src/components/'
     }
   },
@@ -57,7 +57,7 @@ module.exports = {
           loader: 'style-loader!css-loader!autoprefixer-loader?browsers=last 2 version'
       },{
           test: /\.(png|jpg|woff|woff2)$/,
-          loader: 'url-loader?limit=8192'
+          loader: 'url-loader'
       },{
           test:/\.json$/,
           loader: 'json-loader'

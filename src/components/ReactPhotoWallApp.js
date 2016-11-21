@@ -4,14 +4,14 @@ var React = require('react/addons');
 
 // CSS
 require('normalize.css');
-require('../styles/main.css');
+require('src/assets/styles/main.css');
 
 // 获取图片相关的数据
-var imagesData = require('../data/imagesData.json');
+var imagesData = require('src/assets/data/imagesData.json');
 
 // 将图片名信息转化成图片URL信息
 imagesData = imagesData.map(function(image){
-    image.imageURL = require('../images/' + image.fileName);
+    image.imageURL = require('src/assets/images/' + image.fileName);
     return image;
 });
 
