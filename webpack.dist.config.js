@@ -54,7 +54,7 @@ module.exports = {
           loader: 'react-hot!babel-loader'  // 从右往左开始执行，react-hot：实时编译react组件的loader
       }, {
           test: /\.css$/,
-          loader: 'style-loader!css-loader!autoprefixer-loader?browsers=last 2 version'
+          loader: 'style-loader!css-loader!postcss-loader'
       },{
           test: /\.(png|jpg|woff|woff2)$/,
           loader: 'url-loader'
@@ -63,4 +63,7 @@ module.exports = {
           loader: 'json-loader'
       }]
   },
+    postcss: function () {
+        return [require('autoprefixer')]
+    }
 };
