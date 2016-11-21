@@ -30,9 +30,9 @@ module.exports = {
   resolve: {
     extensions: ['', '.js', '.jsx'],
     alias: {                                // 为目录指定别名
-      'styles': __dirname + '/src/styles',
-      'mixins': __dirname + '/src/mixins',
-      'components': __dirname + '/src/components/'
+        'src/assets': __dirname + '/src/assets',
+        'styles': __dirname + '/src/assets/styles',
+        'components': __dirname + '/src/components/'
     }
   },
   module: {
