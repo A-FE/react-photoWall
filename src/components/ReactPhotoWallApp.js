@@ -4,7 +4,7 @@ var React = require('react/addons');
 
 // CSS
 require('normalize.css');
-require('../styles/main.scss');
+require('../styles/main.css');
 
 // 获取图片相关的数据
 var imagesData = require('../data/imagesData.json');
@@ -30,17 +30,50 @@ function getRotateDeg() {
 }
 
 var ImgFigure = React.createClass({
-   render: function () {
+    getInitialState: function () {
+      return {
+          reverse: false    // 是否翻转
+      };
+    },
+    handleClick: function () {
+        if(this.props.arrange.isCenter){
+            this.setState({
+                reverse: !this.state.reverse
+            });
+        }else{
+            this.setState({
+                reverse: false
+            });
+            this.props.centerClick();
+        }
+    },
+    render: function () {
        var pos = this.props.arrange.pos ? this.props.arrange.pos : {};
        var transform = {
            transform: 'rotate(' + getRotateDeg() + ')'
        };
-       var styleObj = Object.assign({}, transform, pos);
+        var styleObj = {};
+        if(this.props.arrange.isCenter){
+            styleObj = pos;
+        }else{
+            styleObj = Object.assign({}, transform, pos);
+        }
+
+        var imgFigureClassName = 'img-figure';
+        imgFigureClassName += this.state.reverse ? ' is-inverse' : '';
+
        return (
-           <figure className="img-figure" style={styleObj}>
-               <img src={this.props.data.imageURL} alt={this.props.data.title}/>
+           <figure className={imgFigureClassName} style={styleObj} onClick={this.handleClick}>
+               <img src={this.props.data.imageURL}
+                    alt={this.props.data.title}
+               />
                <figcaption>
                    <h2 className="img-title">{this.props.data.title}</h2>
+                   <div className="img-back" onClick={this.handleClick}>
+                       <p>
+                           {this.props.data.des}
+                       </p>
+                   </div>
                </figcaption>
            </figure>
        );
@@ -90,7 +123,7 @@ var ReactPhotoWallApp = React.createClass({
         this.Constant.centerPos = {
             left: halfStageW - halfImgW + 'px',
             top: halfStageH - halfImgH + 'px',
-            transform: 'rotate(0)'
+            zIndex: 11
         };
 
         // 计算左右图片的位置
@@ -127,7 +160,10 @@ var ReactPhotoWallApp = React.createClass({
             topImgSpliceIndex = 0,                     // 顶部图片的索引
             imgsArrangeCenterArr = imgsArrangeArr.splice(centerIndex, 1);  // 中心图片的状态
             // 首先居中 中心图片,旋转0度
-            imgsArrangeCenterArr[0].pos = centerPos;
+            imgsArrangeCenterArr[0] = {
+                pos: centerPos,
+                isCenter: true
+            };
 
             // 取出要布局上侧的图片的状态信息
             topImgSpliceIndex = Math.floor(Math.random() * imgsArrangeArr.length);
@@ -139,7 +175,8 @@ var ReactPhotoWallApp = React.createClass({
                 pos: {
                     left: getRangeRandom(vPosRangeX),
                     top: getRangeRandom(vPosRangeY)
-                }
+                },
+                isCenter: false
             };
         }
 
@@ -156,6 +193,7 @@ var ReactPhotoWallApp = React.createClass({
                     top: getRangeRandom(hPosRangeY)
                 };
             }
+            image.isCenter = false;
         });
         if (imgsArrangeTopArr && imgsArrangeTopArr[0]) {
             imgsArrangeArr.splice(topImgSpliceIndex, 0, imgsArrangeTopArr[0]);
@@ -174,10 +212,16 @@ var ReactPhotoWallApp = React.createClass({
                     pos: {
                         left: 0,
                         top: 0
-                    }
+                    },
+                    isCenter: false
                 }
             ]
         };
+    },
+    handlerClick: function (index) {
+        return function () {
+            this.rearrange(index);
+        }.bind(this);
     },
     render: function () {
         var controllerUnits = [],
@@ -188,11 +232,14 @@ var ReactPhotoWallApp = React.createClass({
                     pos: {
                         left: 0,
                         top: 0
-                    }
+                    },
+                    isCenter: false
                 };
             }
             imgFigures.push(<ImgFigure data={image} key={'img' + index} ref={'imageFigure' + index }
-                                       arrange={this.state.imgsArrangeArr[index]}></ImgFigure>);
+                                       arrange={this.state.imgsArrangeArr[index]}
+                                       centerClick={this.handlerClick(index)
+                                       }></ImgFigure>);
         }.bind(this));
         return (
             <section className="stage" ref="stage" id="stage">
